@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Claim Your Surprise 🎁</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 320px;
+      animation: pop 0.6s ease;
+    }
+    @keyframes pop {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    h1 {
+      color: #ff4d6d;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #444;
+      font-size: 15px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .yes {
+      background: #ff4d6d;
+      color: white;
+    }
+    .yes:hover {
+      background: #e63b5f;
+    }
+    .no {
+      background: #ddd;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🎁 Surprise Unlocked!</h1>
+  <p>Hello Smriti 🌸<br><br>
+     This is not a scam (promise 😄).<br>
+     Just one honest question from my heart 💖
+  </p>
+
+  <h2>Will you be my Valentine? 💘</h2>
+
+  <button class="yes" onclick="yes()">YES 💕</button>
+  <button class="no" onclick="no()">NO 🙈</button>
+</div>
+
+<script>
+  function yes() {
+    document.querySelector('.card').innerHTML = `
+      <h1>🥰 YAY!</h1>
+      <p>You just made someone very happy 💖<br><br>
+      Screenshot this & tell Rahul 😉</p>
+    `;
+  }
+
+  function no() {
+    alert("Oops 😅 wrong button… try again?");
+  }
+</script>
+
+</body>
+</html>
