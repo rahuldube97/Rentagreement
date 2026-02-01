@@ -7,21 +7,32 @@
     body {
       margin: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
       font-family: 'Segoe UI', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.5s ease;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.7);
     }
 
     .card {
+      position: relative;
       background: white;
       padding: 30px;
       border-radius: 20px;
       text-align: center;
-      max-width: 340px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      animation: pop 0.5s ease;
+      max-width: 360px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      z-index: 1;
+      animation: pop 0.4s ease;
     }
 
     @keyframes pop {
@@ -29,96 +40,122 @@
       to { transform: scale(1); opacity: 1; }
     }
 
-    h1 {
-      color: #ff4d6d;
-      margin-bottom: 10px;
+    .question {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
     }
 
-    p {
-      font-size: 16px;
-      color: #444;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
+    .yes {
+      margin-top: 20px;
+      padding: 14px 40px;
+      font-size: 18px;
+      border-radius: 30px;
       border: none;
-      border-radius: 25px;
       background: #ff4d6d;
       color: white;
-      font-size: 15px;
       cursor: pointer;
+    }
+
+    .no {
+      margin-top: 15px;
+      padding: 10px 22px;
+      font-size: 14px;
+      border-radius: 20px;
+      border: none;
+      background: #ddd;
+      color: #555;
+      cursor: pointer;
+      position: absolute;
     }
 
     .promise {
       font-weight: bold;
+      font-size: 18px;
       color: #ff4d6d;
-      font-size: 17px;
     }
 
     .timer {
       margin-top: 15px;
-      font-size: 15px;
-      color: #333;
+      font-size: 16px;
       font-weight: bold;
+      color: #333;
     }
   </style>
 </head>
 <body>
 
+<div class="overlay"></div>
+
 <div class="card" id="card">
-  <h1>Verification Step 1 💌</h1>
-  <p>Will you be my Valentine?</p>
-  <button onclick="next()">YES 😊</button>
+  <p class="question">Will you be my Valentine?</p>
+  <button class="yes" onclick="next()">YES 💖</button>
+  <button class="no" id="noBtn">NO 🙈</button>
 </div>
 
 <script>
   let step = 1;
 
+  const gifs = [
+    "https://media.giphy.com/media/l0MYB8Ory7Hqefo9a/giphy.gif",   // Valentine shy
+    "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",   // Pakka?
+    "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif",    // Lock it
+    "https://media.giphy.com/media/26FPJGjhefSJuaRhu/giphy.gif",    // I love you funny
+    "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif"         // Promise cute
+  ];
+
+  document.body.style.backgroundImage = `url(${gifs[0]})`;
+
   function next() {
-    const card = document.getElementById("card");
     step++;
+    document.body.style.backgroundImage = `url(${gifs[step - 1]})`;
 
     if (step === 2) {
-      card.innerHTML = `
-        <h1>Step 2 😌</h1>
-        <p>Pakka?</p>
-        <button onclick="next()">Haan 😏</button>
-      `;
-    }
-
+      updateCard("Pakka?", "Haan 😌");
+    } 
     else if (step === 3) {
-      card.innerHTML = `
-        <h1>Step 3 🔒</h1>
-        <p>Lock kardun?</p>
-        <button onclick="next()">Lock it 🔐</button>
-      `;
-    }
-
+      updateCard("Lock kardu?", "Lock it 🔒");
+    } 
     else if (step === 4) {
-      card.innerHTML = `
-        <h1>Step 4 😈</h1>
-        <p>Bol I love you aur tu apni ego rakh sakta hai XD</p>
-        <button onclick="next()">I Love You ❤️</button>
-      `;
-    }
-
+      updateCard("Bol I love you aur tu apni ego rakh sakta hai XD", "I LOVE YOU ❤️");
+    } 
     else if (step === 5) {
-      card.innerHTML = `
-        <h1>Final Promise 💖</h1>
+      document.getElementById("card").innerHTML = `
         <p class="promise">
           Promise tera dhyaan rakhoonga and will always love you ❤️
         </p>
-        <button onclick="startTimer()">Deal 🤝</button>
+        <button class="yes" onclick="startTimer()">Deal 🤝</button>
       `;
     }
   }
 
-  function startTimer() {
+  function updateCard(text, yesText) {
     const card = document.getElementById("card");
     card.innerHTML = `
-      <h1>Countdown Started ⏳</h1>
-      <p>Days to go till 14th Feb 2026 💘</p>
+      <p class="question">${text}</p>
+      <button class="yes" onclick="next()">${yesText}</button>
+      <button class="no" id="noBtn">NO 🙈</button>
+    `;
+    attachNo();
+  }
+
+  function attachNo() {
+    const no = document.getElementById("noBtn");
+    function move() {
+      const x = Math.random() * (window.innerWidth - 120);
+      const y = Math.random() * (window.innerHeight - 60);
+      no.style.left = x + "px";
+      no.style.top = y + "px";
+    }
+    no.addEventListener("mouseover", move);
+    no.addEventListener("touchstart", move);
+  }
+
+  function startTimer() {
+    document.body.style.backgroundImage = `url(${gifs[4]})`;
+    const card = document.getElementById("card");
+    card.innerHTML = `
+      <p class="question">Days to go till 14th Feb 2026 💘</p>
       <div class="timer" id="timer"></div>
     `;
     countdown();
@@ -130,17 +167,20 @@
     const now = new Date().getTime();
     const diff = target - now;
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
 
     document.getElementById("timer").innerHTML =
-      `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
+      `${d} Days ${h} Hours ${m} Minutes ${s} Seconds`;
   }
+
+  attachNo();
 </script>
 
 </body>
 </html>
+
 
 
